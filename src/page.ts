@@ -62,4 +62,4 @@ class ConfigurationForm {
 
 }
 
-export { Page }
+export { Page, ExtensionElements }
