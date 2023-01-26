@@ -9,7 +9,8 @@ class Page {
   private page: Document = document
 
   hasFileCards(): boolean {
-    const fileCard = this.page.querySelector('.file-card')
+    const fileCard = document.querySelector('.file-card')
+    console.log({fileCard})
     return fileCard != null
   }
 

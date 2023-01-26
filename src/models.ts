@@ -57,6 +57,8 @@ class FileCard {
     this.footer.style.justifyContent = 'center'
     this.footer.style.margin = '15px'
     this.footer.style.flexWrap = 'wrap'
+
+    fileCard.appendChild(this.footer)
   }
 
 
@@ -76,6 +78,7 @@ class FileCard {
     console.log('inner')
     console.log(tagContainer.innerHTML)
     this.footer.innerHTML = tagContainer.innerHTML
+    this.footer.appendChild(tagContainer)
   }
 }
 
