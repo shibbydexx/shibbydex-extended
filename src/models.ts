@@ -10,8 +10,6 @@ class Tag {
     this.description = description
     this.slug = slug
   }
-
-
 }
 
 class FileCard {
@@ -78,9 +76,10 @@ class FileCard {
     console.log('inner')
     console.log(tagContainer.innerHTML)
     this.footer.innerHTML = tagContainer.innerHTML
-    this.footer.appendChild(tagContainer)
   }
 }
+
+
 
 class Configuration {
 
