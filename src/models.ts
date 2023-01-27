@@ -51,6 +51,8 @@ class FileCard {
     this.footer.classList.add('card-text')
     this.footer.classList.add('text-center')
     this.footer.classList.add('text-light')
+    this.footer.classList.add('sdx-generated-content')
+    this.footer.classList.add('sdx-filecard-footer')
 
     this.footer.style.display = 'flex'
     this.footer.style.justifyContent = 'center'

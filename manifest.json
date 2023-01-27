@@ -12,7 +12,8 @@
     {
       "matches": ["*://shibbydex.com/*"],
       "js": ["index.js"],
-      "run_at": "document_start"
+      "run_at": "document_end",
+      "all_frames": true
     }
   ]
 
