@@ -4,7 +4,9 @@
   "name": "shibbydexx",
   "version": "0.1",
 
-  "description": "Adds some useful features to the amazing shibbydexx",
+  "description": "Adds some useful features to the amazing shibbydex",
+
+  "permissions": ["webNavigation", "storage"],
 
   "content_scripts": [
     {
