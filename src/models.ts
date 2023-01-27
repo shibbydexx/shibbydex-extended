@@ -17,6 +17,7 @@ class FileCard {
   fileId: string = 'temp'
   footer: HTMLElement
   tags: Tag[] | null = null 
+  config: Configuration = new Configuration()
 
   constructor(fileCard: Element) {
     const fileHref: HTMLLinkElement | null = fileCard.querySelector('.card-link')
@@ -26,11 +27,11 @@ class FileCard {
       console.error(fileCard.innerHTML)
       throw new Error('could not find file link for card')
     }
-    
+
     this.fileLink = fileHref.href
     const fileIdRegex = new RegExp('.*\:\/\/shibbydex\.com\/file\/(.*)')
 
-    
+
     const matchResults: Array<string> | null = fileIdRegex.exec(this.fileLink)
 
     if(matchResults == null) {
@@ -44,7 +45,7 @@ class FileCard {
     this.fileId = fileId
 
     this.footer = document.createElement('p')
-    
+
     this.footer.classList.add('h4')
     this.footer.classList.add('col-12')
     this.footer.classList.add('card-text')
@@ -68,13 +69,27 @@ class FileCard {
   setTags(tags: Tag[]) {
     this.tags = tags
     const tagContainer = document.createElement('div')
+
+
+    // do aliases first
     this.tags.forEach((tag: Tag) => {
-      tagContainer.appendChild(ExtensionElements.createTagElement(tag))
+      const alias = this.config.getTagAlias(tag)
+      if(alias) {
+        tagContainer.appendChild(ExtensionElements.createAliasElement(tag, alias))
+      }
     })
-    console.log('outer')
-    console.log(tagContainer.outerHTML)
-    console.log('inner')
-    console.log(tagContainer.innerHTML)
+
+    // then plain tags
+    //
+    if(!this.config.showOnlyAliasedTags) {
+      this.tags.forEach((tag: Tag) => {
+        const alias = this.config.getTagAlias(tag)
+        if(!alias) {
+          tagContainer.appendChild(ExtensionElements.createTagElement(tag))
+        }
+      })
+
+    }
     this.footer.innerHTML = tagContainer.innerHTML
   }
 }
@@ -86,16 +101,28 @@ class Configuration {
   // map of tag slug to tag alias
   private tagConfig: Map<string, string> = new Map<string, string>
 
+  readonly showOnlyAliasedTags: boolean = true
 
-  getTagAlias(tag: string): string | undefined {
-    return this.tagConfig.get(tag)
+  constructor() {
+    this.tagConfig.set('my-pet', '🐱')
+    this.tagConfig.set('intimate', '🫂')
+    this.tagConfig.set('loop', '🔁')
+    this.tagConfig.set('short-length', '⏩️')
+    this.tagConfig.set('playful', '😜')
+    this.tagConfig.set('shy', '🫢')
+    this.tagConfig.set('obedience', '🙇‍♀️')
+    this.tagConfig.set('kissing', '😘')
+    this.tagConfig.set('gamer', '🎮️')
+  }
+
+  getTagAlias(tag: Tag): string | undefined {
+    return this.tagConfig.get(tag.slug)
   }
 
   setTagAlias(tag: string, alias: string) {
-    
+    this.tagConfig.set(tag, alias)
   }
 
-  
 }
 
 

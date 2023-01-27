@@ -55,6 +55,24 @@ class ExtensionElements {
     return tagElement
   }
 
+  static createAliasElement(tag: Tag, alias: string): Element {
+    const tagElement = document.createElement('a')
+    tagElement.href = `https://shibbydex.com/tag/${tag.slug}`
+    tagElement.title = tag.description
+    tagElement.innerText = alias
+
+    tagElement.classList.add(GENERATED_ELEMENT_CLASS)
+    tagElement.classList.add('badge')
+    tagElement.classList.add('badge-dark')
+    tagElement.classList.add('pt-2')
+    tagElement.classList.add('pb-2')
+    tagElement.classList.add('mb-1')
+
+    tagElement.style.margin = "5px"
+
+    return tagElement
+  }
+
 }
 
 

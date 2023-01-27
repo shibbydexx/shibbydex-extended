@@ -1,11 +1,12 @@
 import { Scraper } from './scraper'
 import { Page } from './page'
-import { FileCard, Tag } from './models'
+import { FileCard, Tag, Configuration } from './models'
 
 
 
 const scraper = new Scraper()
 const page = new Page()
+const config = new Configuration()
 
 
 
