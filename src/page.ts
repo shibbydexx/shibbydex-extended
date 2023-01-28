@@ -30,6 +30,7 @@ class ExtensionElements {
 
     const innerSpan = document.createElement('span')
     innerSpan.classList.add('sr-only')
+    innerSpan.classList.add('sdx-generated-content')
     innerSpan.innerText = 'Loading...'
 
     loadingElement.appendChild(innerSpan)
@@ -71,6 +72,25 @@ class ExtensionElements {
     tagElement.style.margin = "5px"
 
     return tagElement
+  }
+
+  static createCardFooter(): HTMLElement {
+    const footer = document.createElement('p')
+
+    footer.classList.add('h4')
+    footer.classList.add('col-12')
+    footer.classList.add('card-text')
+    footer.classList.add('text-center')
+    footer.classList.add('text-light')
+    footer.classList.add('sdx-generated-content')
+    footer.classList.add('sdx-filecard-footer')
+
+    footer.style.display = 'flex'
+    footer.style.justifyContent = 'center'
+    footer.style.margin = '15px'
+    footer.style.flexWrap = 'wrap'
+
+    return footer
   }
 
 }

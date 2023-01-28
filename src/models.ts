@@ -44,21 +44,13 @@ class FileCard {
     const [_, fileId] = matchResults
     this.fileId = fileId
 
-    this.footer = document.createElement('p')
+    const existingFooter: HTMLElement | null = fileCard.querySelector('.sdx-filecard-footer')
 
-    this.footer.classList.add('h4')
-    this.footer.classList.add('col-12')
-    this.footer.classList.add('card-text')
-    this.footer.classList.add('text-center')
-    this.footer.classList.add('text-light')
-    this.footer.classList.add('sdx-generated-content')
-    this.footer.classList.add('sdx-filecard-footer')
-
-    this.footer.style.display = 'flex'
-    this.footer.style.justifyContent = 'center'
-    this.footer.style.margin = '15px'
-    this.footer.style.flexWrap = 'wrap'
-
+    if(existingFooter) {
+      this.footer = existingFooter
+    } else {
+      this.footer = ExtensionElements.createCardFooter()
+    }
     fileCard.appendChild(this.footer)
   }
 
@@ -81,8 +73,7 @@ class FileCard {
       }
     })
 
-    // then plain tags
-    //
+    // then plain tags if configured
     if(!this.config.showOnlyAliasedTags) {
       this.tags.forEach((tag: Tag) => {
         const alias = this.config.getTagAlias(tag)
@@ -127,6 +118,11 @@ class Configuration {
 
 }
 
+class Cache {
+  // map of fileId to tag list
+  static tagCache: Map<string, Tag[]> = new Map()
+}
 
 
-export { Tag, FileCard, Configuration }
+
+export { Tag, FileCard, Configuration, Cache }

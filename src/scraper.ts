@@ -1,4 +1,4 @@
-import { Tag, FileCard } from './models'
+import { Tag, FileCard, Cache } from './models'
 
 const MAX_REQUESTS = 10
 
@@ -28,6 +28,11 @@ class Scraper {
   }
 
   async fetchFileTags(fileId: string): Promise<Tag[]> {
+    const cachedTags = Cache.tagCache.get(fileId)
+    if(cachedTags) {
+      return Promise.resolve(cachedTags)
+    }
+
     const doc = await this.fetchFilePage(fileId)
     const links: NodeListOf<HTMLLinkElement> = doc.querySelectorAll("a.badge")
     const tags: Tag[] = []
@@ -45,6 +50,7 @@ class Scraper {
         tags.push(new Tag(title, description, slug))
       }
     })
+    Cache.tagCache.set(fileId, tags)
     return tags
   }
 

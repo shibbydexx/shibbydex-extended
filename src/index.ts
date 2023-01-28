@@ -1,31 +1,11 @@
 import { Scraper } from './scraper'
 import { Page } from './page'
-import { FileCard, Tag, Configuration } from './models'
+import { FileCard, Tag } from './models'
 
 
 
 const scraper = new Scraper()
 const page = new Page()
-const config = new Configuration()
-
-
-console.log('DEXX: run')
-
-const targetNode: Node = document.querySelector('html')!!
-
-const observerConfig = { childList: true }
-const observer = new MutationObserver((mutationList: MutationRecord[], _) => {
-  mutationList.forEach((mutation: MutationRecord) => {
-    if(mutation.addedNodes.length > 0) {
-      mutation.addedNodes.forEach((node) => {
-        if(node.nodeName === "BODY") {
-          refresh()
-        }
-      })
-    }
-  })
-})
-observer.observe(targetNode, observerConfig)
 
 async function refresh() {
   if(page.hasFileCards()) {
@@ -39,4 +19,32 @@ async function refresh() {
   }
 }
 
+
+function refreshWhenTurboReplacesBody() {
+  // Shibbydex uses Turbo. Turbo occasionally replaces the <body> element so
+  // to make sure our generated content persists we need
+  // to detect this and re-apply our modifications.
+  // see: https://turbo.hotwired.dev/handbook/drive#custom-rendering
+
+
+  const targetNode: Node = document.querySelector('html')!!
+
+  const observerConfig = { childList: true }
+  const observer = new MutationObserver((mutationList: MutationRecord[], _) => {
+    mutationList.forEach((mutation: MutationRecord) => {
+      if(mutation.addedNodes.length > 0) {
+        mutation.addedNodes.forEach((node) => {
+          if(node.nodeName === "BODY") {
+            refresh()
+          }
+        })
+      }
+    })
+  })
+  observer.observe(targetNode, observerConfig)
+
+}
+
+
 refresh()
+refreshWhenTurboReplacesBody()
