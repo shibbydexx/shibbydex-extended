@@ -4,8 +4,12 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   plugins: [
-    //new CopyPlugin({
-    //})
+    new CopyPlugin({
+      patterns: [
+        {from: './manifest.json', to: './'},
+        {from: './src/config/config.html', to: './config/'},
+      ]
+    })
   ],
   entry: {
     './index': './src/index.ts',
