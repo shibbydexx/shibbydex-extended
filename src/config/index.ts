@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const buttonsGroup: HTMLElement = form.querySelector('#sdx-buttons-group')!!
 
     // set form to match stored config
-    Array.from(existingConfig.aliases).forEach(([alias, slug]) => {
+    Array.from(existingConfig.aliases).forEach(([slug, alias]) => {
       aliasesGroup.appendChild(createFormRow(alias, slug))
     })
 
