@@ -1,16 +1,39 @@
-console.log('creating form')
+import { Config } from './model'
 
 const FORM_ID = 'sdx-config-form'
+const NUMBER_OF_BLANK_ROWS = 5
+
+const configPromise: Promise<Config> = Config.loadConfig()
 
 
-
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('creating form')
+document.addEventListener('DOMContentLoaded', async () => {
   const form = document.querySelector(`#${FORM_ID}`)
+  const existingConfig: Config = await configPromise
 
   if(form) {
-    form.appendChild(createFormRow())
-    form.appendChild(createFormButtonsRow())
+    const aliasesGroup: HTMLElement = form.querySelector('#sdx-aliases-group')!!
+    const buttonsGroup: HTMLElement = form.querySelector('#sdx-buttons-group')!!
+
+    // set form to match stored config
+    existingConfig.aliases.forEach((alias, slug) => {
+      aliasesGroup.appendChild(createFormRow(alias, slug))
+    })
+
+    const showAllCheckbox: HTMLInputElement = form.querySelector('#showAllTags')!!
+
+    if(existingConfig.showAll) {
+      showAllCheckbox.checked = existingConfig.showAll
+    } else {
+      showAllCheckbox.removeAttribute('checked')
+    }
+
+    // add a few blank rows
+    for(let i = 0; i < NUMBER_OF_BLANK_ROWS; i++) {
+      aliasesGroup.appendChild(createFormRow())
+    }
+    
+    // finally add buttons
+    buttonsGroup.appendChild(createFormButtonsRow())
   } else { console.error(`could not locate form with id ${FORM_ID}`) }
 });
 
@@ -23,8 +46,9 @@ function createFormRow(alias: string = '', slug: string = ''): HTMLElement {
 
   const aliasInput: HTMLInputElement = document.createElement('input')
   aliasInput.type = 'text'
-  aliasInput.textContent = alias
+  aliasInput.value = alias
   aliasInput.classList.add('form-control')
+  aliasInput.classList.add('sdx-alias-input')
   aliasInput.placeholder = 'Alias'
 
 
@@ -33,8 +57,9 @@ function createFormRow(alias: string = '', slug: string = ''): HTMLElement {
 
   const tagSlugInput: HTMLInputElement = document.createElement('input')
   tagSlugInput.type = 'text'
-  tagSlugInput.textContent = slug
+  tagSlugInput.value = slug
   tagSlugInput.classList.add('form-control')
+  tagSlugInput.classList.add('sdx-slug-input')
   tagSlugInput.placeholder = 'Tag Slug'
 
   firstCol.appendChild(aliasInput)
@@ -65,6 +90,7 @@ function createFormButtonsRow(): HTMLElement {
   const saveButton = document.createElement('button')
   saveButton.classList.add('btn')
   saveButton.classList.add('btn-primary')
+  saveButton.id = 'sdx-config-save'
   saveButton.innerText = 'Save'
   saveButton.onclick = onSave
 
@@ -78,12 +104,66 @@ function createFormButtonsRow(): HTMLElement {
 }
 
 
-function onSave(e: Event) {
+async function saveConfig(aliases: Map<string, string>, showAll: boolean) {
+  const config = { aliases, show_all: showAll }
+
+  await browser.storage.local.set(config)
+}
+
+
+async function onSave(e: Event) {
   e.preventDefault()
-  console.log('save')
+
+  const saveButton: HTMLButtonElement = document.querySelector('#sdx-config-save')!!
+  saveButton.setAttribute('disabled', '')
+  saveButton.innerText = 'Saving...'
+
+  const aliasGroup: HTMLElement = document.querySelector('#sdx-aliases-group')!!
+  const showAllCheckbox: HTMLInputElement = document.querySelector('#showAllTags')!!
+  const showAll: boolean = showAllCheckbox.checked
+  
+  const aliases: Map<string, string> = new Map()
+
+  const aliasRows = aliasGroup.querySelectorAll('.row')
+
+  aliasRows.forEach((row: Element) => {
+    const aliasInput: HTMLInputElement = row.querySelector('.sdx-alias-input')!!
+    const slugInput: HTMLInputElement = row.querySelector('.sdx-slug-input')!!
+
+    if(!isNullOrWhitespace(aliasInput.value) && !isNullOrWhitespace(slugInput.value)) {
+      aliases.set(slugInput.value, aliasInput.value)
+    }
+  })
+
+  const updatedConfig = new Config(aliases, showAll)
+
+  await Config.saveConfig(updatedConfig)
+
+  const saveSuccessBanner = document.createElement('div')
+  saveSuccessBanner.classList.add('alert')
+  saveSuccessBanner.classList.add('alert-success')
+  saveSuccessBanner.setAttribute('role', 'alert')
+  saveSuccessBanner.innerText = 'Save successful!'
+
+  saveButton.removeAttribute('disabled')
+  saveButton.innerText = 'Save'
+
+  const container = document.querySelector('.container')!!
+  container.appendChild(saveSuccessBanner)
 }
 
 function onAddRows(e: Event) {
   e.preventDefault()
-  console.log('add rows')
+  const form = document.querySelector(`#${FORM_ID}`)!!
+  const aliasesGroup: HTMLElement = form.querySelector('#sdx-aliases-group')!!
+  for(let i = 0; i < NUMBER_OF_BLANK_ROWS; i++) {
+    aliasesGroup.appendChild(createFormRow())
+  }
+}
+
+function isNullOrWhitespace(input: string | undefined | null): boolean {
+  if (typeof input === 'undefined' || input === null) {
+    return true;
+  }
+  return input.replace(/\s/g, '').length < 1;
 }
