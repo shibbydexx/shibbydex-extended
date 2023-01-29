@@ -32,10 +32,7 @@ class Config {
       show_all: newConfig.showAll
     }
 
-
     await browser.storage.local.set(newRawConfig)
-    console.error('config saved')
-    console.error(JSON.stringify(newRawConfig))
   }
 }
 

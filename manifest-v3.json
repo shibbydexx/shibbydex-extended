@@ -5,7 +5,7 @@
   "short_name": "SDX",
   "version": "0.1",
 
-  "description": "Allows tags to be viewed on file cards on shibbydex and provides some customisation. For more information see https://github.com/shibbydexx/shibbydex-extended",
+  "description": "Allows tags to be viewed on file cards on shibbydex. For more information see https://github.com/shibbydexx/shibbydex-extended",
 
   "permissions": ["webNavigation", "storage"],
   "content_scripts": [

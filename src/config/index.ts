@@ -6,12 +6,9 @@ const NUMBER_OF_BLANK_ROWS = 5
 const configPromise: Promise<Config> = Config.loadConfig()
 
 
-console.error('script loaded')
 document.addEventListener('DOMContentLoaded', async () => {
   const form = document.querySelector(`#${FORM_ID}`)
   const existingConfig: Config = await configPromise
-  console.error('executing')
-  console.error(JSON.stringify(existingConfig))
 
   if(form) {
     const aliasesGroup: HTMLElement = form.querySelector('#sdx-aliases-group')!!
@@ -130,13 +127,10 @@ async function onSave(e: Event) {
     const slugInput: HTMLInputElement = row.querySelector('.sdx-slug-input')!!
 
     if(!isNullOrWhitespace(aliasInput.value) && !isNullOrWhitespace(slugInput.value)) {
-      console.error('SETTING ALIAS' + slugInput.value + aliasInput.value)
       aliases.set(slugInput.value, aliasInput.value)
     }
   })
 
-  console.error('ABOUT TO UPDATE CONFIG WITH NEW ALIASES')
-  console.log(aliases)
   const updatedConfig = new Config(aliases, showAll)
 
   await Config.saveConfig(updatedConfig)
