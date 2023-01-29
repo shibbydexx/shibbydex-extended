@@ -7,6 +7,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {from: './manifest.json', to: './'},
+        {from: './img/*.png', to: './'},
         {from: './src/config/config.html', to: './config/'},
       ]
     })
