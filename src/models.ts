@@ -1,4 +1,5 @@
 import { ExtensionElements } from './page'
+import { Config } from './config/model'
 
 class Tag {
   title: string
@@ -17,10 +18,11 @@ class FileCard {
   fileId: string = 'temp'
   footer: HTMLElement
   tags: Tag[] | null = null 
-  config: Configuration = new Configuration()
+  config: Config
 
-  constructor(fileCard: Element) {
+  constructor(fileCard: Element, config: Config) {
     const fileHref: HTMLLinkElement | null = fileCard.querySelector('.card-link')
+    this.config = config
 
     if(fileHref == null) {
       console.error('unable to find fileLink for card')
@@ -67,16 +69,16 @@ class FileCard {
 
     // do aliases first
     this.tags.forEach((tag: Tag) => {
-      const alias = this.config.getTagAlias(tag)
+      const alias = this.config.getTagAlias(tag.slug)
       if(alias) {
         tagContainer.appendChild(ExtensionElements.createAliasElement(tag, alias))
       }
     })
 
     // then plain tags if configured
-    if(!this.config.showOnlyAliasedTags) {
+    if(this.config.showAll) {
       this.tags.forEach((tag: Tag) => {
-        const alias = this.config.getTagAlias(tag)
+        const alias = this.config.getTagAlias(tag.slug)
         if(!alias) {
           tagContainer.appendChild(ExtensionElements.createTagElement(tag))
         }
@@ -88,36 +90,6 @@ class FileCard {
 }
 
 
-
-class Configuration {
-
-  // map of tag slug to tag alias
-  private tagConfig: Map<string, string> = new Map<string, string>
-
-  readonly showOnlyAliasedTags: boolean = true
-
-  constructor() {
-    this.tagConfig.set('my-pet', '🐱')
-    this.tagConfig.set('intimate', '🫂')
-    this.tagConfig.set('loop', '🔁')
-    this.tagConfig.set('short-length', '⏩️')
-    this.tagConfig.set('playful', '😜')
-    this.tagConfig.set('shy', '🫢')
-    this.tagConfig.set('obedience', '🙇‍♀️')
-    this.tagConfig.set('kissing', '😘')
-    this.tagConfig.set('gamer', '🎮️')
-  }
-
-  getTagAlias(tag: Tag): string | undefined {
-    return this.tagConfig.get(tag.slug)
-  }
-
-  setTagAlias(tag: string, alias: string) {
-    this.tagConfig.set(tag, alias)
-  }
-
-}
-
 class Cache {
   // map of fileId to tag list
   static tagCache: Map<string, Tag[]> = new Map()
@@ -125,4 +97,4 @@ class Cache {
 
 
 
-export { Tag, FileCard, Configuration, Cache }
+export { Tag, FileCard, Cache }

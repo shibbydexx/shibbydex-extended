@@ -11,6 +11,9 @@ class Config {
     this.showAll = showAll
   }
 
+  getTagAlias(slug: string): string | undefined {
+    return this.aliases.get(slug)
+  }
 
   static async loadConfig(): Promise<Config> {
     const storage = await browser.storage.local.get(DEFAULT_CONFIG)
