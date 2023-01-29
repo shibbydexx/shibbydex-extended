@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const buttonsGroup: HTMLElement = form.querySelector('#sdx-buttons-group')!!
 
     // set form to match stored config
-    existingConfig.aliases.forEach((alias, slug) => {
+    Array.from(existingConfig.aliases).forEach(([alias, slug]) => {
       aliasesGroup.appendChild(createFormRow(alias, slug))
     })
 
@@ -81,7 +81,7 @@ function createFormButtonsRow(): HTMLElement {
   const addRowsButton = document.createElement('button')
   addRowsButton.classList.add('btn')
   addRowsButton.classList.add('btn-secondary')
-  addRowsButton.innerText = 'Add more rows'
+  addRowsButton.innerText = 'Add More'
   addRowsButton.onclick = onAddRows
 
   const secondCol = document.createElement('div')
@@ -124,7 +124,7 @@ async function onSave(e: Event) {
   
   const aliases: Map<string, string> = new Map()
 
-  const aliasRows = aliasGroup.querySelectorAll('.row')
+  const aliasRows = Array.from(aliasGroup.querySelectorAll('.row'))
 
   aliasRows.forEach((row: Element) => {
     const aliasInput: HTMLInputElement = row.querySelector('.sdx-alias-input')!!

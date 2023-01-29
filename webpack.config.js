@@ -9,6 +9,8 @@ module.exports = {
         {from: './manifest.json', to: './'},
         {from: './img/*.png', to: './'},
         {from: './src/config/config.html', to: './config/'},
+        {from: 'node_modules/webextension-polyfill/dist/browser-polyfill.js'},
+        {from: 'node_modules/webextension-polyfill/dist/browser-polyfill.js', to: './config/'},
       ]
     })
   ],
