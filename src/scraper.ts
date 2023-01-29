@@ -1,18 +1,23 @@
 import { Tag, FileCard, Cache } from './models'
+import { Config } from './config/model'
 
 const MAX_REQUESTS = 10
 
 class Scraper {
   private host: string = 'shibbydex.com'
   private filePath: string = 'file'
+  private config: Config
 
+  constructor(config: Config) {
+    this.config = config
+  }
 
   async scrapeFileCards(): Promise<FileCard[]> {
     const rawFileCards: NodeListOf<Element> = document.querySelectorAll('.file-card')
     const fileCards: FileCard[] = []
 
     rawFileCards.forEach((value: Element) => {
-      const newCard = new FileCard(value)
+      const newCard = new FileCard(value, this.config)
       fileCards.push(newCard)
       value.appendChild(newCard.footer)
     })

@@ -4,11 +4,11 @@ import { FileCard, Tag } from './models'
 import { Config } from './config/model'
 
 
-const scraper = new Scraper()
 const page = new Page()
 
 async function refresh() {
   const config = await Config.loadConfig()
+  const scraper = new Scraper(config)
 
   if(page.hasFileCards()) {
     const fileCards: FileCard[] = page.getFileCards(config)
