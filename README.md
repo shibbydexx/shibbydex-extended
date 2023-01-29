@@ -1,6 +1,9 @@
 ## Shibbydex Extended
 This browser extension is a fan project and is in no way officially associated with shibbydex.
 
+### Building
+To build and package the extension for submission, simply run `./scripts/package.sh` from the project root
+
 ### What does it do?
 Right now, it allows you to view tags on any page where file cards are shown on the site. You can customise this by providing card aliases and restricting cards shown only to those with aliases to allow you to get a quick overview of whether a file has particular tags you are interested in.
 
