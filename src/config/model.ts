@@ -1,4 +1,4 @@
-const DEFAULT_CONFIG = { aliases: {}, show_all: false }
+const DEFAULT_CONFIG = { aliases: '', show_all: false }
 
 class Config {
   // map of slug to alias
@@ -17,17 +17,25 @@ class Config {
 
   static async loadConfig(): Promise<Config> {
     const storage = await browser.storage.local.get(DEFAULT_CONFIG)
-    return new Config(storage.aliases, storage.show_all)
+    try {
+      const aliases: Map<string, string> = new Map(JSON.parse(storage.aliases))
+      return new Config(aliases, storage.show_all)
+    } catch(error) {
+      return new Config(new Map(), storage.show_all)
+    }
+
   }
 
   static async saveConfig(newConfig: Config) {
     const newRawConfig = {
-      aliases: newConfig.aliases,
+      aliases: JSON.stringify(Array.from(newConfig.aliases.entries())),
       show_all: newConfig.showAll
     }
 
 
     await browser.storage.local.set(newRawConfig)
+    console.error('config saved')
+    console.error(JSON.stringify(newRawConfig))
   }
 }
 

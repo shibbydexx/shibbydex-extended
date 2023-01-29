@@ -6,16 +6,22 @@ const NUMBER_OF_BLANK_ROWS = 5
 const configPromise: Promise<Config> = Config.loadConfig()
 
 
+console.error('script loaded')
 document.addEventListener('DOMContentLoaded', async () => {
   const form = document.querySelector(`#${FORM_ID}`)
   const existingConfig: Config = await configPromise
+  console.error('executing')
+  console.error(JSON.stringify(existingConfig))
 
   if(form) {
     const aliasesGroup: HTMLElement = form.querySelector('#sdx-aliases-group')!!
     const buttonsGroup: HTMLElement = form.querySelector('#sdx-buttons-group')!!
 
-    // set form to match stored config
-    Array.from(existingConfig.aliases).forEach(([slug, alias]) => {
+    const slugs = Array.from(existingConfig.aliases.keys())
+
+    slugs.forEach((slug) => {
+      let alias: string = '' 
+      alias = existingConfig.aliases.get(slug)!!
       aliasesGroup.appendChild(createFormRow(alias, slug))
     })
 
@@ -104,13 +110,6 @@ function createFormButtonsRow(): HTMLElement {
 }
 
 
-async function saveConfig(aliases: Map<string, string>, showAll: boolean) {
-  const config = { aliases, show_all: showAll }
-
-  await browser.storage.local.set(config)
-}
-
-
 async function onSave(e: Event) {
   e.preventDefault()
 
@@ -131,10 +130,13 @@ async function onSave(e: Event) {
     const slugInput: HTMLInputElement = row.querySelector('.sdx-slug-input')!!
 
     if(!isNullOrWhitespace(aliasInput.value) && !isNullOrWhitespace(slugInput.value)) {
+      console.error('SETTING ALIAS' + slugInput.value + aliasInput.value)
       aliases.set(slugInput.value, aliasInput.value)
     }
   })
 
+  console.error('ABOUT TO UPDATE CONFIG WITH NEW ALIASES')
+  console.log(aliases)
   const updatedConfig = new Config(aliases, showAll)
 
   await Config.saveConfig(updatedConfig)
