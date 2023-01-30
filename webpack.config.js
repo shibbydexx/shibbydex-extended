@@ -17,6 +17,7 @@ module.exports = {
   entry: {
     './index': './src/index.ts',
     './config/index': './src/config/index.ts',
+    './config/clickListener': './src/config/clickListener.ts',
   },
   mode: 'production',
   module: {

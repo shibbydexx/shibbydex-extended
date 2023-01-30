@@ -25,8 +25,6 @@ class FileCard {
     this.config = config
 
     if(fileHref == null) {
-      console.error('unable to find fileLink for card')
-      console.error(fileCard.innerHTML)
       throw new Error('could not find file link for card')
     }
 
@@ -85,7 +83,8 @@ class FileCard {
       })
 
     }
-    this.footer.innerHTML = tagContainer.innerHTML
+    this.footer.innerHTML = ''
+    this.footer.appendChild(tagContainer)
   }
 }
 

@@ -16,6 +16,9 @@
       "all_frames": true
     }
   ],
+  "background": {
+    "scripts": ["config/clickListener.js"]
+  },
   "browser_action": {
     "default_icon": {
       "16": "img/logo-16.png",
@@ -24,8 +27,7 @@
       "64": "img/logo-64.png",
       "96": "img/logo-96.png"
     },
-    "default_title": "Shibbydex Extended",
-    "default_popup": "config/config.html"
+    "default_title": "Shibbydex Extended"
   }
 }
 
