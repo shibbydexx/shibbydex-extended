@@ -3,7 +3,7 @@
   "manifest_version": 3,
   "name": "Shibbydex Extended",
   "short_name": "SDX",
-  "version": "0.1",
+  "version": "0.3",
 
   "description": "Allows tags to be viewed on file cards on shibbydex. For more information see https://github.com/shibbydexx/shibbydex-extended",
 
