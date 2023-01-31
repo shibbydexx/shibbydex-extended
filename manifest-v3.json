@@ -7,7 +7,7 @@
 
   "description": "Allows tags to be viewed on file cards on shibbydex. For more information see https://github.com/shibbydexx/shibbydex-extended",
 
-  "permissions": ["webNavigation", "storage"],
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["*://shibbydex.com/*"],
