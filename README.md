@@ -11,6 +11,7 @@ Right now, it allows you to view tags on any page where file cards are shown on 
 Please note that the site already has an excellent and in depth search function, this extension is just intended to make browsing a bit easier and was a bit of fun to make.
 
 ### Potential Future Improvements
+ - Include default configuration so the extension can just to used out of the box without any setup
  - Improved options page:
    - Visual overhaul
    - Use a pre-populated, searchable dropdown for tag selection
