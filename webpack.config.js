@@ -15,8 +15,8 @@ module.exports = {
     })
   ],
   entry: {
-    './index': './src/index.ts',
-    './config/index': './src/config/index.ts',
+    './index': './src/index.tsx',
+    './config/index': './src/config/index.tsx',
     './config/clickListener': './src/config/clickListener.ts',
   },
   mode: 'production',

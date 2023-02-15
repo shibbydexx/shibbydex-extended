@@ -1,6 +1,29 @@
 import { ExtensionElements } from './page'
 import { Config } from './config/model'
 
+
+interface FileDetails{
+  title: string
+  link: string
+  description: string
+  tier: string
+  audience: string
+  type: string
+  length: string
+  releaseDate: string
+  advanced: FileDetailsAdvanced | null // need to make an additional HTTP request for these
+}
+
+interface FileDetailsAdvanced {
+  details: FileDetails
+  variants: string[]
+  author: string
+  artist: string
+  playCount: string
+  tags: Tag[]
+  triggers: string[]
+}
+
 class Tag {
   title: string
   description: string
@@ -96,4 +119,4 @@ class Cache {
 
 
 
-export { Tag, FileCard, Cache }
+export { Tag, FileCard, Cache, FileDetails, FileDetailsAdvanced }

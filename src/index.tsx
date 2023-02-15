@@ -1,11 +1,36 @@
-import { Scraper } from './scraper'
+import React from "react"
+import ReactDOM from "react-dom"
 import { Page } from './page'
+import { FileList } from "./FileList"
+
+/*
+import { Scraper } from './scraper'
 import { FileCard, Tag } from './models'
 import { Config } from './config/model'
+*/
 
 
 const page = new Page()
 
+
+// New way - totally replace container object with react
+async function refresh() {
+  if(page.hasFileCards()) {
+    const container = document.querySelector('.container')
+    if(container) {
+      // TODO: Get all file cards on the page, pass to FileList
+      // FileList should then make a request to get all advanced details of the file
+      container.innerHTML = ''
+      ReactDOM.render(<FileList files={[]} />, container)
+
+    } else {
+      console.log('could not find container element')
+    }
+
+  }
+}
+
+/* *** Old way, minimal invasiveness ***
 async function refresh() {
   const config = await Config.loadConfig()
   const scraper = new Scraper(config)
@@ -20,6 +45,7 @@ async function refresh() {
     })
   }
 }
+*/
 
 
 function refreshWhenTurboReplacesBody() {
